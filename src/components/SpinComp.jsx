@@ -2,9 +2,9 @@ import React, { forwardRef, useImperativeHandle, useRef } from "react";
 
 const Wheel = forwardRef(({ onFinished }, ref) => {
   const wheelRef = useRef();
-  const segments = Array.from({ length: 12 }, (_, i) => i + 1); // Numbers 1 to 12
+  const segments = Array.from({ length: 12 }, (_, i) => i + 1);
   const totalSegments = segments.length;
-  const segmentAngle = 360 / totalSegments; // Angle per segment
+  const segmentAngle = 360 / totalSegments;
 
   useImperativeHandle(ref, () => ({
     spinTo: (rotation, duration) => {
