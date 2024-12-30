@@ -3,7 +3,7 @@ import Wheel from "./components/SpinComp"; // Assuming the Wheel component is in
 
 const App = () => {
   const wheelRef = useRef(null);
-  const [userInputs, setUserInputs] = useState([3, 5, 4]);
+  const [userInputs, setUserInputs] = useState(["", "", ""]);
   const [isValidated, setIsValidated] = useState(false);
   const [currentSpin, setCurrentSpin] = useState(0);
   const [isEligible, setIsEligible] = useState(true);
@@ -62,7 +62,18 @@ const App = () => {
     alert(`Spin finished! The arrow points to: ${result}`);
 
     // Check if the first spin result matches the first input value
-    const isMatch = currentSpin === 0 ? result === userInputs[0] : true;
+    let isMatch = false;
+
+    if (currentSpin === 0) {
+      // For the first spin, match the result with the first input
+      isMatch = result === userInputs[0];
+    } else if (currentSpin === 1) {
+      // For the second spin, check if it matches the first input
+      isMatch = result === userInputs[0];
+    } else if (currentSpin === 2) {
+      // For the third spin, check if it matches the first input
+      isMatch = result === userInputs[0];
+    }
 
     if (!isMatch) {
       alert("The spin result did not match your first input. Try again.");
@@ -110,9 +121,8 @@ const App = () => {
       />
 
       <button style={styles.button} onClick={handleSpin}>
-        Spin Wheel
+        Spin Wheel {currentSpin} /3
       </button>
-      <p>Spin {currentSpin}/3</p>
     </div>
   );
 };
