@@ -15,7 +15,7 @@ const Wheel = forwardRef(({ onFinished }, ref) => {
         setTimeout(() => {
           const normalizedRotation = rotation % 360;
           const segmentIndex = Math.floor(normalizedRotation / segmentAngle);
-          const result = segments[segments.length - 1 - segmentIndex]; // Adjust for clockwise rotation
+          const result = segments[segments.length - 1 - segmentIndex];
           if (onFinished) {
             onFinished(result);
           }
@@ -38,7 +38,7 @@ const Wheel = forwardRef(({ onFinished }, ref) => {
           position: "absolute",
           top: "-10px",
           left: "50%",
-          transform: "translateX(-50%)",
+          transform: "translateX(-50%) rotate(180deg)",
           width: "0",
           height: "0",
           borderLeft: "15px solid transparent",

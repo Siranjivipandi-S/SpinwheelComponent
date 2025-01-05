@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from "react";
-import Wheel from "./components/SpinComp"; // Assuming the Wheel component is in the same directory
+import Wheel from "./components/SpinComp";
 
 const App = () => {
   const wheelRef = useRef(null);
@@ -42,55 +42,43 @@ const App = () => {
 
     if (!isEligible) {
       alert("Spin denied! The last spin didn't match your first input.");
+      setCurrentSpin(0);
       return;
     }
 
-    // Set the same duration and speed for both the second and third spins
-    const duration = 3500; // Same duration for both second and third spins
-    const direction = 1; // Always clockwise (right) rotation (positive)
-    const randomRotation = Math.random() * 360 + 360 * 5; // Random number of rotations (ensures multiple turns)
+    const duration = 3500; // Spin duration
+    const direction = 1; // Always clockwise
+    const randomRotation = Math.random() * 360 + 360 * 5; // Random rotations
 
-    const winningRotation = direction * randomRotation; // Always clockwise rotation
+    const winningRotation = direction * randomRotation;
 
     if (wheelRef.current) {
-      // Triggering the spin again using the wheelRef
-      wheelRef.current.spinTo(winningRotation, duration); // Apply the same function for all spins
+      // Triggering the spin using the wheelRef
+      wheelRef.current.spinTo(winningRotation, duration);
     }
   };
 
   const handleFinished = (result) => {
     alert(`Spin finished! The arrow points to: ${result}`);
 
-    // Check if the first spin result matches the first input value
-    let isMatch = false;
-
-    if (currentSpin === 0) {
-      // For the first spin, match the result with the first input
-      isMatch = result === userInputs[0];
-    } else if (currentSpin === 1) {
-      // For the second spin, check if it matches the first input
-      isMatch = result === userInputs[0];
-    } else if (currentSpin === 2) {
-      // For the third spin, check if it matches the first input
-      isMatch = result === userInputs[0];
-    }
+    const isMatch = result === userInputs[0];
 
     if (!isMatch) {
       alert("The spin result did not match your first input. Try again.");
-      setIsEligible(false); // Disable further spins if the result does not match the first input
-    } else {
-      setIsEligible(true); // Enable further spins if the result matches the first input
+      setIsEligible(false); // Disable further spins
+      setCurrentSpin(0); // Reset currentSpin to 0
+      return; // Exit early
     }
 
+    // If the result matches, proceed
+    setIsEligible(true);
     setCurrentSpin((prevSpin) => prevSpin + 1);
 
-    // If the first spin result matches, we proceed to the next spins
-    if (currentSpin === 0 && isMatch) {
+    if (currentSpin === 0) {
       alert("You can now proceed to the second and third spins!");
     }
   };
 
-  // Force the Wheel component to re-render when the currentSpin changes
   const handleWheelKey = useCallback(() => {
     return currentSpin; // Returning the currentSpin as a key to force re-render
   }, [currentSpin]);
@@ -113,7 +101,6 @@ const App = () => {
       </div>
       <p style={styles.validationMessage}>{validationMessage}</p>
 
-      {/* Key change triggers re-render of the Wheel component */}
       <Wheel
         ref={wheelRef}
         onFinished={handleFinished}
@@ -149,7 +136,7 @@ const styles = {
     borderRadius: "5px",
   },
   validationMessage: {
-    color: "green", // Will toggle dynamically based on validation
+    color: "green",
     fontSize: "14px",
   },
   button: {
